@@ -203,7 +203,7 @@ let today = new Date();
 let todayStr = ("0"+(today.getMonth()+1)).slice(-2) + "-" + ("0"+today.getDate()).slice(-2);
 
 let list = "";
-anniversaires.forEach(a => {
+anniversaire.forEach(a => {
   if(a.date === todayStr){
     list += `<li>🎉 ${a.nom} (AUJOURD'HUI)</li>`;
   } else {
