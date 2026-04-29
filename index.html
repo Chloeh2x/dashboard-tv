@@ -1,1 +1,238 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard Hydrogène</title>
 
+<style>
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: linear-gradient(135deg, #0b0f1a, #111827);
+  color: #e5e7eb;
+}
+
+/* LAYOUT */
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+/* GAUCHE */
+.left {
+  width: 50%;
+  padding: 30px;
+  box-sizing: border-box;
+}
+
+.title {
+  font-size: 2em;
+  margin-bottom: 20px;
+  color: #38bdf8;
+}
+
+/* SLIDER */
+.slider {
+  position: relative;
+  width: 100%;
+  height: 85%;
+  overflow: hidden;
+}
+
+.slide {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  box-shadow: 0 0 25px rgba(0,255,200,0.2);
+}
+
+.slide.active {
+  opacity: 1;
+}
+
+/* DROITE */
+.right {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+.block {
+  flex: 1;
+  padding: 25px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.block h2 {
+  color: #22c55e;
+  margin-top: 0;
+}
+
+.weather {
+  font-size: 1.5em;
+}
+
+ul {
+  padding-left: 20px;
+}
+
+li {
+  margin-bottom: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- GAUCHE : SLIDER PRODUITS -->
+  <div class="left">
+    <div class="title">Produits</div>
+
+    <div class="slider">
+      <img src="images/120320205-_MG_0908.jpg" class="slide active">
+      <img src="images/12032025-_MG_0918.jpg" class="slide">
+      <img src="images/IMG_0166.jpg" class="slide">
+      <img src="images/IMG_0735.jpg" class="slide">
+      <img src="images/IMG_0938.JPG" class="slide">
+      <img src="images/g005 (3).png" class="slide">
+      <img src="images/hemera (2).png" class="slide">
+      <img src="images/hemera arrière.png" class="slide">
+      <img src="images/hermione 14.png" class="slide">
+      <img src="images/hermione+drone.PNG" class="slide">
+    </div>
+  </div>
+
+  <!-- DROITE -->
+  <div class="right">
+
+    <!-- METEO -->
+    <div class="block">
+      <h2>🌦️ Météo</h2>
+      <div id="meteo" class="weather">Chargement...</div>
+    </div>
+
+    <!-- ANNIVERSAIRES -->
+    <div class="block">
+      <h2>🎂 Anniversaires</h2>
+      <ul id="anniv"></ul>
+    </div>
+
+    <!-- ACTUS -->
+    <div class="block">
+      <h2>📰 Actualités Hydrogène</h2>
+      <ul id="rss"></ul>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+/* =========================
+   SLIDER (10 secondes)
+========================= */
+let slides = document.querySelectorAll(".slide");
+let index = 0;
+
+setInterval(() => {
+  slides[index].classList.remove("active");
+  index = (index + 1) % slides.length;
+  slides[index].classList.add("active");
+}, 10000);
+
+/* =========================
+   METEO (Open-Meteo)
+========================= */
+fetch("https://api.open-meteo.com/v1/forecast?latitude=48.85&longitude=2.35&current_weather=true")
+.then(res => res.json())
+.then(data => {
+  let w = data.current_weather;
+  document.getElementById("meteo").innerText =
+    `Paris : ${w.temperature}°C - Vent ${w.windspeed} km/h`;
+})
+.catch(() => {
+  document.getElementById("meteo").innerText = "Erreur météo";
+});
+
+/* =========================
+   ANNIVERSAIRES AUTO
+========================= */
+const anniversaires = [
+  { nom: "Hélène", date: "01-17" },
+  { nom: "Guillaume", date: "01-31" },
+  { nom: "Alexandre", date: "02-03" },
+  { nom: "Pierre-Yves", date: "02-22" },
+  { nom: "Kylian", date: "03-07" },
+  { nom: "Mickael", date: "03-08" },
+  { nom: "Jean-Luc", date: "03-14" },
+  { nom: "Amaury", date: "03-17" },
+  { nom: "Stéphane", date: "03-30" },
+  { nom: "Eric", date: "04-05" },
+  { nom: "Milo", date: "04-14" },
+  { nom: "Axel", date: "05-07" },
+  { nom: "Thierry", date: "05-20" },
+  { nom: "David", date: "05-27" },
+  { nom: "Younes", date: "06-06" },
+  { nom: "Arnaud", date: "06-08" },
+  { nom: "Edouard", date: "08-20" },
+  { nom: "Alexandra", date: "09-24" },
+  { nom: "Jérome", date: "09-30" },
+  { nom: "Célia", date: "10-27" },
+  { nom: "Anna", date: "10-30" },
+  { nom: "Thomas", date: "11-02" },
+  { nom: "Jérémy.R", date: "11-05" },
+  { nom: "Loan", date: "11-13" },
+  { nom: "Jérémy.W", date: "12-01" },
+  { nom: "Simon", date: "12-02" },
+  { nom: "Ingrid", date: "12-18" },
+  { nom: "Hugo", date: "12-20" }
+
+  
+];
+
+let today = new Date();
+let todayStr = ("0"+(today.getMonth()+1)).slice(-2) + "-" + ("0"+today.getDate()).slice(-2);
+
+let list = "";
+anniversaires.forEach(a => {
+  if(a.date === todayStr){
+    list += `<li>🎉 ${a.nom} (AUJOURD'HUI)</li>`;
+  } else {
+    list += `<li>${a.nom} - ${a.date}</li>`;
+  }
+});
+
+document.getElementById("anniv").innerHTML = list;
+
+/* =========================
+   RSS HYDROGENE
+========================= */
+fetch("https://api.rss2json.com/v1/api.json?rss_url=https://www.hydrogeninsight.com/rss")
+.then(res => res.json())
+.then(data => {
+  let html = "";
+  data.items.slice(0,6).forEach(item => {
+    html += `<li>${item.title}</li>`;
+  });
+  document.getElementById("rss").innerHTML = html;
+})
+.catch(() => {
+  document.getElementById("rss").innerHTML = "<li>Erreur chargement actualités</li>";
+});
+
+/* =========================
+   AUTO REFRESH (10 min)
+========================= */
+setTimeout(() => {
+  location.reload();
+}, 600000);
+</script>
+
+</body>
+</html>
