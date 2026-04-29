@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard Hydrogène</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: linear-gradient(135deg, #0b0f1a, #111827);
+  color: #e5e7eb;
+}
+
+/* Layout */
+.container {
+  display: flex;
+  height: 100vh;
+}
+
+/* GAUCHE */
+.left {
+  width: 50%;
+  padding: 30px;
+  box-sizing: border-box;
+}
+
+.products {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.products img {
+  width: 100%;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0,255,200,0.2);
+  transition: transform 0.3s;
+}
+
+.products img:hover {
+  transform: scale(1.05);
+}
+
+/* DROITE */
+.right {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* BLOCS */
+.block {
+  flex: 1;
+  padding: 25px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.block h2 {
+  color: #22c55e;
+  margin-top: 0;
+}
+
+/* Texte */
+ul {
+  padding-left: 20px;
+}
+
+li {
+  margin-bottom: 10px;
+}
+
+/* METEO */
+.weather {
+  font-size: 1.5em;
+}
+
+/* TITRES */
+.title {
+  font-size: 2em;
+  margin-bottom: 20px;
+  color: #38bdf8;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+  <!-- GAUCHE -->
+  <div class="left">
+    <div class="title">Produits</div>
+    <div class="products">
+      <img src="images/produit1.jpg">
+      <img src="images/produit2.jpg">
+      <img src="images/produit3.jpg">
+      <img src="images/produit4.jpg">
+    </div>
+  </div>
+
+  <!-- DROITE -->
+  <div class="right">
+
+    <!-- METEO -->
+    <div class="block">
+      <h2>🌦️ Météo</h2>
+      <div id="meteo" class="weather">Chargement...</div>
+    </div>
+
+    <!-- ANNIVERSAIRES -->
+    <div class="block">
+      <h2>🎂 Anniversaires</h2>
+      <ul id="anniv">
+        <li>Chargement...</li>
+      </ul>
+    </div>
+
+    <!-- ACTUS -->
+    <div class="block">
+      <h2>📰 Actualités Hydrogène</h2>
+      <ul id="rss"></ul>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+/* =========================
+   METEO (Open-Meteo gratuit)
+========================= */
+fetch("https://api.open-meteo.com/v1/forecast?latitude=48.85&longitude=2.35&current_weather=true")
+.then(res => res.json())
+.then(data => {
+  let w = data.current_weather;
+  document.getElementById("meteo").innerText =
+    `${w.temperature}°C - Vent ${w.windspeed} km/h`;
+});
+
+/* =========================
+   ANNIVERSAIRES AUTO
+========================= */
+const anniversaires = [
+  { nom: "Jean", date: "04-12" },
+  { nom: "Sophie", date: "04-18" },
+  { nom: "Marc", date: "04-29" }
+];
+
+let today = new Date();
+let todayStr = ("0"+(today.getMonth()+1)).slice(-2) + "-" + ("0"+today.getDate()).slice(-2);
+
+let list = "";
+anniversaires.forEach(a => {
+  if(a.date === todayStr){
+    list += `<li>🎉 ${a.nom} (AUJOURD'HUI)</li>`;
+  } else {
+    list += `<li>${a.nom} - ${a.date}</li>`;
+  }
+});
+
+document.getElementById("anniv").innerHTML = list;
+
+/* =========================
+   RSS HYDROGENE AUTO
+========================= */
+fetch("https://api.rss2json.com/v1/api.json?rss_url=https://www.hydrogeninsight.com/rss")
+.then(res => res.json())
+.then(data => {
+  let html = "";
+  data.items.slice(0,6).forEach(item => {
+    html += `<li>${item.title}</li>`;
+  });
+  document.getElementById("rss").innerHTML = html;
+})
+.catch(() => {
+  document.getElementById("rss").innerHTML = "<li>Erreur chargement actualités</li>";
+});
+
+/* =========================
+   AUTO REFRESH (toutes les 10 min)
+========================= */
+setTimeout(() => {
+  location.reload();
+}, 600000);
+
+</script>
+
+</body>
+</html>
