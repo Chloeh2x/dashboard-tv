@@ -154,7 +154,7 @@ fetch("https://api.open-meteo.com/v1/forecast?latitude=48.85&longitude=2.35&curr
 .then(data => {
   let w = data.current_weather;
   document.getElementById("meteo").innerText =
-    `Paris : ${w.temperature}°C - Vent ${w.windspeed} km/h`;
+    `Brest : ${w.temperature}°C - Vent ${w.windspeed} km/h`;
 })
 .catch(() => {
   document.getElementById("meteo").innerText = "Erreur météo";
@@ -171,7 +171,7 @@ const anniversaires = [
   { nom: "Kylian", date: "03-07" },
   { nom: "Mickael", date: "03-08" },
   { nom: "Jean-Luc", date: "03-14" },
-  { nom: "Amaury", date: "03-17" },
+  { nom: "Amaury", date: "04-29" },
   { nom: "Stéphane", date: "03-30" },
   { nom: "Eric", date: "04-05" },
   { nom: "Milo", date: "04-14" },
