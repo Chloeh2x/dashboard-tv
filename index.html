@@ -92,6 +92,7 @@ li {
 
   <!-- GAUCHE : SLIDER PRODUITS -->
   <div class="left">
+    <div class="left">
     <div class="title">Produits</div>
 
     <div class="slider">
@@ -229,6 +230,22 @@ fetch("https://api.rss2json.com/v1/api.json?rss_url=https://www.h2-mobile.fr/act
   document.getElementById("rss").innerHTML = "<li>Erreur chargement actualités</li>";
 });
 
+  /* =========================
+   HEURE
+========================= */
+function updateHeure() {
+  let now = new Date();
+  let heure = now.toLocaleTimeString('fr-FR', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit'
+  });
+  document.getElementById("heure").innerText = heure;
+}
+
+setInterval(updateHeure, 1000);
+updateHeure();
+  
 /* =========================
    AUTO REFRESH (10 min)
 ========================= */
