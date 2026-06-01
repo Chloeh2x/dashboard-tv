@@ -117,9 +117,6 @@ li {
         <img src="images/g350.jpg" alt="">
       </div>
       <div class="slide">
-        <video muted playsinline><source src="https://dms.licdn.com/playlist/vid/v2/D4E05AQEu2ktLBXE6dw/mp4-640p-30fp-crf28/B4EZy9YoiwHoBw-/0/1772703892083?e=2147483647&v=beta&t=zFJAx5sTlEE7tBSmhg_DsUyxXYQdGnrDIEl4-UbnMA8" type="video/mp4"></video>
-      </div>
-      <div class="slide">
         <img src="images/t1000.JPG" alt="">
       </div>
       <div class="slide">
@@ -138,6 +135,9 @@ li {
         <img src="images/hemera_arriere.png" alt="">
       </div>
       <div class="slide">
+        <video muted playsinline><source src="https://dms.licdn.com/playlist/vid/v2/D4E05AQEu2ktLBXE6dw/mp4-640p-30fp-crf28/B4EZy9YoiwHoBw-/0/1772703892083?e=2147483647&v=beta&t=zFJAx5sTlEE7tBSmhg_DsUyxXYQdGnrDIEl4-UbnMA8" type="video/mp4"></video>
+      </div>
+      <div class="slide">
         <img src="images/hermione14.png" alt="">
       </div>
       <div class="slide">
@@ -151,6 +151,9 @@ li {
       </div>
       <div class="slide">
         <img src="images/hermionesavane.JPG" alt="">
+      </div>
+      <div class="slide">
+        <video muted playsinline><source src="https://dms.licdn.com/playlist/vid/v2/D4E05AQH8js8jfyoy6w/mp4-640p-30fp-crf28/B4EZmGW307IMBg-/0/1758895943519?e=2147483647&v=beta&t=WjB_zKa3XCCAFuZrSps-cG_Jt1Hx4ZxHtqltZ5RRzmM" type="video/mp4"></video>
       </div>
     </div>
   </div>
@@ -327,7 +330,7 @@ document.getElementById("anniv").innerHTML = list;
 /* =========================
    RSS HYDROGENE
 ========================= */
-fetch("https://api.rss2json.com/v1/api.json?rss_url=https://hydrogentoday.info/")
+fetch("https://api.rss2json.com/v1/api.json?rss_url=https://hydrogentoday.info/feed/")
 .then(res => res.json())
 .then(data => {
   let html = "";
