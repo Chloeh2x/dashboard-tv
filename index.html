@@ -111,6 +111,7 @@ li {
     <div class="slider">
       <img src="images/12032025-_MG_0908.jpg" class="slide active">
       <img src="images/g350.jpg" class="slide">
+      <video muted playsinline><source src="https://dms.licdn.com/playlist/vid/v2/D4E05AQEu2ktLBXE6dw/mp4-640p-30fp-crf28/B4EZy9YoiwHoBw-/0/1772703892083?e=2147483647&v=beta&t=zFJAx5sTlEE7tBSmhg_DsUyxXYQdGnrDIEl4-UbnMA8" type="video/mp4"></video>
       <img src="images/t1000.JPG" class="slide">
       <img src="images/hub.jpg" class="slide">
       <img src="images/f005-1.jpg" class="slide">
@@ -169,6 +170,58 @@ updateHeure();
 /* =========================
    SLIDER (10 secondes)
 ========================= */
+
+const slides = document.querySelectorAll('.slide');
+let current = 0;
+let timer;
+
+function nextSlide() {
+    current = (current + 1) % slides.length;
+    showSlide(current);
+}
+
+function showSlide(index) {
+
+    clearTimeout(timer);
+
+    slides.forEach(slide => {
+
+        slide.classList.remove('active');
+
+        const video = slide.querySelector('video');
+
+        if (video) {
+            video.pause();
+            video.currentTime = 0;
+        }
+    });
+
+    const slide = slides[index];
+    slide.classList.add('active');
+
+    const video = slide.querySelector('video');
+
+    if (video) {
+
+        video.play();
+
+        video.onended = function () {
+            nextSlide();
+        };
+
+    } else {
+
+        timer = setTimeout(() => {
+            nextSlide();
+        }, 10000);
+
+    }
+}
+
+showSlide(0);
+
+  
+/*  
 let slides = document.querySelectorAll(".slide");
 let index = 0;
 
@@ -176,7 +229,7 @@ setInterval(() => {
   slides[index].classList.remove("active");
   index = (index + 1) % slides.length;
   slides[index].classList.add("active");
-}, 10000);
+}, 10000); */
 
 /* =========================
    METEO (Open-Meteo)
